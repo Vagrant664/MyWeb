@@ -119,6 +119,61 @@
             height: 300px;
             margin-bottom: 30px;
         }
+        
+        /* 新增样式 - 更新日志 */
+        .update-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .update-item {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .update-item:last-child {
+            border-bottom: none;
+        }
+        
+        .update-date {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .update-content {
+            margin-top: 5px;
+        }
+        
+        /* 新增样式 - 统计卡片 */
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stats-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        /* 新增样式 - 响应式优化 */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -162,6 +217,94 @@
         </div>
     </section>
 
+    <!-- 统计概览 -->
+    <section class="container mb-5">
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number text-primary">17</div>
+                    <div class="stats-label">总任务数</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number text-success">12</div>
+                    <div class="stats-label">已完成</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number text-warning">5</div>
+                    <div class="stats-label">进行中</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number text-info">71%</div>
+                    <div class="stats-label">完成率</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最近进展和更新日志 -->
+    <section class="container mb-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">最近学习进展</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="task-item">
+                            <h6>完成董锐老师微分中值定理思考题</h6>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success" style="width: 100%"></div>
+                            </div>
+                            <small class="text-muted">已完成 · 2025-11-23</small>
+                        </div>
+                        <div class="task-item">
+                            <h6>CSAPP学习</h6>
+                            <div class="progress mb-2">
+                                <div class="progress-bar" style="width: 75%"></div>
+                            </div>
+                            <small class="text-muted">进行中 · 预计60天后完成</small>
+                        </div>
+                        <div class="task-item">
+                            <h6>mit线性代数</h6>
+                            <div class="progress mb-2">
+                                <div class="progress-bar" style="width: 40%"></div>
+                            </div>
+                            <small class="text-muted">进行中 · 预计20天后完成</small>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="web/tasks.html" class="btn btn-primary">查看所有任务</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">网站更新日志</h5>
+                        <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#addUpdateModal">
+                            <i class="fas fa-plus"></i> 添加
+                        </button>
+                    </div>
+                    <div class="card-body update-log">
+                        <div id="updatesContainer">
+                            <!-- 更新日志将通过JavaScript动态添加 -->
+                            <div class="update-item">
+                                <div class="update-date">2025-11-23</div>
+                                <div class="update-content">网站正式上线，包含任务管理、进度图表、学习笔记和感悟功能。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 功能介绍 -->
     <section class="container mb-5">
         <div class="row text-center mb-5">
@@ -200,7 +343,7 @@
                             <i class="fas fa-sticky-note"></i>
                         </div>
                         <h5 class="card-title">学习笔记</h5>
-                        <p class="card-text">记录重要知识点，构建个人知识体系。</p>
+                        <p class="card-text">记录重要知识点，支持图片和文件上传。</p>
                     </div>
                 </div>
             </div>
@@ -218,42 +361,9 @@
         </div>
     </section>
 
-    <!-- 最近进展 -->
+    <!-- 学习统计和最新内容 -->
     <section class="container mb-5">
         <div class="row">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">最近学习进展</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="task-item">
-                            <h6>完成董锐老师微分中值定理思考题</h6>
-                            <div class="progress mb-2">
-                                <div class="progress-bar bg-success" style="width: 100%"></div>
-                            </div>
-                            <small class="text-muted">已完成 · 2025-11-23</small>
-                        </div>
-                        <div class="task-item">
-                            <h6>CSAPP学习</h6>
-                            <div class="progress mb-2">
-                                <div class="progress-bar" style="width: 75%"></div>
-                            </div>
-                            <small class="text-muted">进行中 · 预计60天后完成</small>
-                        </div>
-                        <div class="task-item">
-                            <h6>mit线性代数</h6>
-                            <div class="progress mb-2">
-                                <div class="progress-bar" style="width: 40%"></div>
-                            </div>
-                            <small class="text-muted">进行中 · 预计20天后完成</small>
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="web/tasks.html" class="btn btn-primary">查看所有任务</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
@@ -276,59 +386,86 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- 最新笔记和感悟 -->
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">最新笔记</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="note-card p-3 mb-3">
+                                    <h6>凯撒加密</h6>
+                                    <p class="mb-1">例如'Y'+9超过了'Z'，因为要想Y加了之后不溢出，只能让加了之后的那个'Y'+9比A大的不够26，超过26，比如30的话，循环变成4即可，也就是对26取余。所以就可以这样写【（要移动的那个字符，例如Y）+（移动的步数）-'A'】得到与A的距离，再把这个距离对26取余，再加A即可</p>
+                                    <small class="text-muted">2025-11-23</small>
+                                </div>
+                                <div class="note-card p-3">
+                                    <h6>c语言中fgets函数的使用</h6>
+                                    <p class="mb-1"> fgets()的核心功能就一个：从某个"数据来源"读取一整行内容，包括空格，然后存到你指定的"容器"里。</p>
+                                    <small class="text-muted">2025-11-23</small>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <a href="web/notes.html" class="btn btn-outline-primary">查看所有笔记</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">最新感悟</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="reflection-card p-3 mb-3">
+                                    <h6>生活的最大天敌就是不自觉的陷入虚假的表演</h6>
+                                    <p class="mb-1">我们需要对具有表演性的积极状态保持高度的警惕。与其追求被人仰望的的、抽象的伟大，不如平和地专注当下的行动</p>
+                                    <small class="text-muted">2025-11-23</small>
+                                </div>
+                                <div class="reflection-card p-3">
+                                    <h6>怎么样能开心地活着？</h6>
+                                    <p class="mb-1">或者有能和欲望匹配的能力，或者有能把欲望稀释的胸怀</p>
+                                    <small class="text-muted">2025-11-23</small>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <a href="web/reflections.html" class="btn btn-outline-primary">查看所有感悟</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- 最新笔记和感悟 -->
-    <section class="container mb-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">最新笔记</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="note-card p-3 mb-3">
-                            <h6>凯撒加密</h6>
-                            <p class="mb-1">例如'Y'+9超过了'Z'，因为要想Y加了之后不溢出，只能让加了之后的那个'Y'+9比A大的不够26，超过26，比如30的话，循环变成4即可，也就是对26取余。所以就可以这样写【（要移动的那个字符，例如Y）+（移动的步数）-'A'】得到与A的距离，再把这个距离对26取余，再加A即可
-</p>
-                            <small class="text-muted">2023-10-12</small>
-                        </div>
-                        <div class="note-card p-3">
-                            <h6>c语言中fgets函数的使用</h6>
-                            <p class="mb-1"> fgets()的核心功能就一个：从某个“数据来源”读取一整行内容，包括空格，然后存到你指定的“容器”里。</p>
-                            <small class="text-muted">2025-11-23</small>
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="web/notes.html" class="btn btn-outline-primary">查看所有笔记</a>
-                        </div>
-                    </div>
+    <!-- 添加更新日志模态框 -->
+    <div class="modal fade" id="addUpdateModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加更新日志</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">最新感悟</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="reflection-card p-3 mb-3">
-                            <h6>生活的最大天敌就是不自觉的陷入虚假的表演——不是做自己，而是在表演别人眼中的自己。</h6>
-                            <p class="mb-1">我们需要对具有表演性的积极状态保持高度的警惕。与其追求被人仰望的的、抽象的伟大，不如平和地专注当下的行动</p>
-                            <small class="text-muted">2025-11-23</small>
+                <div class="modal-body">
+                    <form id="updateForm">
+                        <div class="mb-3">
+                            <label for="updateDate" class="form-label">更新日期</label>
+                            <input type="date" class="form-control" id="updateDate" required>
                         </div>
-                        <div class="reflection-card p-3">
-                            <h6>怎么样能开心地活着？</h6>
-                            <p class="mb-1">或者有能和欲望匹配的能力，或者有能把欲望稀释的胸怀</p>
-                            <small class="text-muted">2025-11-23</small>
+                        <div class="mb-3">
+                            <label for="updateContent" class="form-label">更新内容</label>
+                            <textarea class="form-control" id="updateContent" rows="4" required></textarea>
                         </div>
-                        <div class="text-center mt-3">
-                            <a href="web/reflections.html" class="btn btn-outline-primary">查看所有感悟</a>
-                        </div>
-                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveUpdateBtn">保存更新</button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- 页脚 -->
     <footer>
@@ -363,8 +500,28 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 首页进度图表
+        // 更新日志数据模型
+        let updates = JSON.parse(localStorage.getItem('siteUpdates')) || [
+            { date: '2025-11-23', content: '网站正式上线，包含任务管理、进度图表、学习笔记和感悟功能。' }
+        ];
+        
+        // DOM元素
+        const updatesContainer = document.getElementById('updatesContainer');
+        const updateForm = document.getElementById('updateForm');
+        const saveUpdateBtn = document.getElementById('saveUpdateBtn');
+        
+        // 初始化
         document.addEventListener('DOMContentLoaded', function() {
+            // 设置默认日期为今天
+            document.getElementById('updateDate').valueAsDate = new Date();
+            
+            // 显示更新日志
+            renderUpdates();
+            
+            // 保存更新事件
+            saveUpdateBtn.addEventListener('click', addUpdate);
+            
+            // 首页进度图表
             const ctx = document.getElementById('progressChart').getContext('2d');
             const progressChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -391,6 +548,58 @@
                 }
             });
         });
+        
+        // 渲染更新日志
+        function renderUpdates() {
+            updatesContainer.innerHTML = '';
+            
+            // 按日期降序排列
+            const sortedUpdates = [...updates].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedUpdates.forEach(update => {
+                const updateElement = document.createElement('div');
+                updateElement.className = 'update-item';
+                
+                updateElement.innerHTML = `
+                    <div class="update-date">${update.date}</div>
+                    <div class="update-content">${update.content}</div>
+                `;
+                
+                updatesContainer.appendChild(updateElement);
+            });
+        }
+        
+        // 添加更新日志
+        function addUpdate() {
+            const date = document.getElementById('updateDate').value;
+            const content = document.getElementById('updateContent').value;
+            
+            if (!date || !content) {
+                alert('请填写所有字段');
+                return;
+            }
+            
+            const newUpdate = {
+                date,
+                content
+            };
+            
+            updates.push(newUpdate);
+            saveUpdates();
+            renderUpdates();
+            
+            // 重置表单并关闭模态框
+            updateForm.reset();
+            document.getElementById('updateDate').valueAsDate = new Date();
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addUpdateModal'));
+            modal.hide();
+        }
+        
+        // 保存更新日志到本地存储
+        function saveUpdates() {
+            localStorage.setItem('siteUpdates', JSON.stringify(updates));
+        }
     </script>
 </body>
 </html>
