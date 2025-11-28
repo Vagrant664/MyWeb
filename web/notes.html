@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>学习笔记 - 学海航行</title>
+    <title>学习笔记 - 觅我</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -131,6 +131,55 @@
             font-size: 0.8rem;
             padding: 4px 10px;
         }
+        
+        .attachment-item {
+            display: inline-block;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .attachment-item img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        
+        .attachment-preview {
+            margin-top: 10px;
+        }
+        
+        .preview-item {
+            display: inline-block;
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .preview-item img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
+        
+        .remove-attachment {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -138,7 +187,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="../index.html">
-                <i class="fas fa-graduation-cap me-2"></i>学海航行
+                <i class="fas fa-graduation-cap me-2"></i>觅我
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -171,7 +220,7 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h1 class="display-5 fw-bold">学习笔记</h1>
-                    <p class="lead mb-0">记录重要知识点，构建个人知识体系</p>
+                    <p class="lead mb-0">记录重要知识点，支持图片和文件上传</p>
                 </div>
                 <div class="col-md-4 text-end">
                     <button class="btn btn-light btn-lg" data-bs-toggle="modal" data-bs-target="#addNoteModal">
@@ -255,6 +304,14 @@
                             <label for="noteContent" class="form-label">笔记内容</label>
                             <textarea class="form-control" id="noteContent" rows="10" required></textarea>
                         </div>
+                        <div class="mb-3">
+                            <label for="noteAttachments" class="form-label">上传附件</label>
+                            <input type="file" class="form-control" id="noteAttachments" multiple>
+                            <div class="form-text">支持图片和文档文件，单个文件不超过5MB。</div>
+                        </div>
+                        <div class="attachment-preview" id="attachmentPreview">
+                            <!-- 附件预览将在这里显示 -->
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -279,7 +336,11 @@
                         <span class="badge bg-secondary category-badge" id="viewNoteDate">日期</span>
                     </div>
                     <div id="viewNoteTags" class="mb-3"></div>
-                    <div id="viewNoteContent" class="border p-3 bg-light rounded"></div>
+                    <div id="viewNoteContent" class="border p-3 bg-light rounded mb-3"></div>
+                    <div id="viewNoteAttachments" class="mb-3">
+                        <h6>附件</h6>
+                        <!-- 附件将在这里显示 -->
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
@@ -294,7 +355,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>学海航行</h5>
+                    <h5>觅我</h5>
                     <p>一个帮助你跟踪学习进度、记录学习点滴的平台。</p>
                 </div>
                 <div class="col-md-3">
@@ -315,7 +376,7 @@
             </div>
             <hr class="my-4 bg-light">
             <div class="text-center">
-                <p>&copy; 2023 学海航行 - 所有权利保留</p>
+                <p>&copy; 2025 HUST-MengFei - 保留网站的解释权</p>
             </div>
         </div>
     </footer>
@@ -330,7 +391,10 @@
         const noteForm = document.getElementById('noteForm');
         const saveNoteBtn = document.getElementById('saveNoteBtn');
         const searchNotesInput = document.getElementById('searchNotes');
+        const noteAttachments = document.getElementById('noteAttachments');
+        const attachmentPreview = document.getElementById('attachmentPreview');
         let currentEditingNoteId = null;
+        let currentAttachments = []; // 存储当前笔记的附件
         
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -366,7 +430,87 @@
                     editNote(currentEditingNoteId);
                 }
             });
+            
+            // 附件上传事件
+            noteAttachments.addEventListener('change', function() {
+                handleFileUpload(this.files);
+            });
         });
+        
+        // 处理文件上传
+        function handleFileUpload(files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                // 检查文件大小 (限制为5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`文件 "${file.name}" 超过5MB限制，已跳过。`);
+                    continue;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const attachment = {
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        data: e.target.result
+                    };
+                    
+                    currentAttachments.push(attachment);
+                    renderAttachmentPreview();
+                };
+                
+                reader.readAsDataURL(file);
+            }
+            
+            // 清空文件输入框，允许重复选择相同文件
+            noteAttachments.value = '';
+        }
+        
+        // 渲染附件预览
+        function renderAttachmentPreview() {
+            attachmentPreview.innerHTML = '';
+            
+            if (currentAttachments.length === 0) {
+                return;
+            }
+            
+            const title = document.createElement('h6');
+            title.textContent = '附件预览:';
+            attachmentPreview.appendChild(title);
+            
+            currentAttachments.forEach((attachment, index) => {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                
+                if (attachment.type.startsWith('image/')) {
+                    // 图片预览
+                    const img = document.createElement('img');
+                    img.src = attachment.data;
+                    img.alt = attachment.name;
+                    previewItem.appendChild(img);
+                } else {
+                    // 文件预览
+                    const fileIcon = document.createElement('div');
+                    fileIcon.className = 'attachment-item';
+                    fileIcon.innerHTML = `<i class="fas fa-file me-1"></i> ${attachment.name}`;
+                    previewItem.appendChild(fileIcon);
+                }
+                
+                const removeBtn = document.createElement('div');
+                removeBtn.className = 'remove-attachment';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = function() {
+                    currentAttachments.splice(index, 1);
+                    renderAttachmentPreview();
+                };
+                
+                previewItem.appendChild(removeBtn);
+                attachmentPreview.appendChild(previewItem);
+            });
+        }
         
         // 渲染笔记列表
         function renderNotes(searchTerm = '', category = 'all') {
@@ -417,6 +561,18 @@
                     `<span class="badge bg-light text-dark me-1">${tag}</span>`
                 ).join('');
                 
+                // 附件显示
+                let attachmentsHtml = '';
+                if (note.attachments && note.attachments.length > 0) {
+                    attachmentsHtml = `
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-paperclip me-1"></i> ${note.attachments.length} 个附件
+                            </small>
+                        </div>
+                    `;
+                }
+                
                 noteElement.innerHTML = `
                     <div class="card note-card h-100 ${note.category}">
                         <div class="card-body">
@@ -439,6 +595,7 @@
                             </div>
                             <p class="card-text">${contentPreview}</p>
                             <div class="mb-2">${tagsHtml}</div>
+                            ${attachmentsHtml}
                             <small class="text-muted">${new Date(note.date).toLocaleDateString()}</small>
                         </div>
                     </div>
@@ -494,6 +651,7 @@
                 category,
                 tags: tagArray,
                 content,
+                attachments: [...currentAttachments], // 保存附件
                 date: new Date().toISOString().split('T')[0]
             };
             
@@ -503,6 +661,8 @@
             
             // 重置表单并关闭模态框
             noteForm.reset();
+            currentAttachments = [];
+            attachmentPreview.innerHTML = '';
             
             const modal = bootstrap.Modal.getInstance(document.getElementById('addNoteModal'));
             modal.hide();
@@ -532,6 +692,42 @@
             // 显示内容
             document.getElementById('viewNoteContent').textContent = note.content;
             
+            // 显示附件
+            const attachmentsContainer = document.getElementById('viewNoteAttachments');
+            attachmentsContainer.innerHTML = '<h6>附件</h6>';
+            
+            if (note.attachments && note.attachments.length > 0) {
+                note.attachments.forEach(attachment => {
+                    const attachmentElement = document.createElement('div');
+                    attachmentElement.className = 'attachment-item';
+                    
+                    if (attachment.type.startsWith('image/')) {
+                        // 显示图片
+                        const img = document.createElement('img');
+                        img.src = attachment.data;
+                        img.alt = attachment.name;
+                        attachmentElement.appendChild(img);
+                        
+                        const link = document.createElement('a');
+                        link.href = attachment.data;
+                        link.target = '_blank';
+                        link.textContent = attachment.name;
+                        attachmentElement.appendChild(link);
+                    } else {
+                        // 显示文件下载链接
+                        const link = document.createElement('a');
+                        link.href = attachment.data;
+                        link.download = attachment.name;
+                        link.innerHTML = `<i class="fas fa-file me-1"></i> ${attachment.name}`;
+                        attachmentElement.appendChild(link);
+                    }
+                    
+                    attachmentsContainer.appendChild(attachmentElement);
+                });
+            } else {
+                attachmentsContainer.innerHTML += '<p class="text-muted">无附件</p>';
+            }
+            
             // 显示模态框
             const modal = new bootstrap.Modal(document.getElementById('viewNoteModal'));
             modal.show();
@@ -546,6 +742,10 @@
             document.getElementById('noteCategory').value = note.category;
             document.getElementById('noteTags').value = note.tags.join(', ');
             document.getElementById('noteContent').value = note.content;
+            
+            // 设置当前附件
+            currentAttachments = note.attachments ? [...note.attachments] : [];
+            renderAttachmentPreview();
             
             // 更改保存按钮行为
             saveNoteBtn.textContent = '更新笔记';
@@ -567,12 +767,15 @@
             notes[noteIndex].category = document.getElementById('noteCategory').value;
             notes[noteIndex].tags = document.getElementById('noteTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
             notes[noteIndex].content = document.getElementById('noteContent').value;
+            notes[noteIndex].attachments = [...currentAttachments];
             
             saveNotes();
             renderNotes();
             
             // 重置表单并关闭模态框
             noteForm.reset();
+            currentAttachments = [];
+            attachmentPreview.innerHTML = '';
             
             // 恢复保存按钮的默认行为
             saveNoteBtn.textContent = '保存笔记';
