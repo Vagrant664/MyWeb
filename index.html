@@ -33,28 +33,33 @@
             font-size: 1.5rem;
         }
         
+        /* 修改英雄区域为左右布局 */
         .hero-section {
-            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95)), url('image/hust_logo.png');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
             color: #333;
-            padding: 100px 0;
-            text-align: center;
+            padding: 80px 0;
             margin-bottom: 40px;
-            position: relative;
             min-height: 500px;
             display: flex;
             align-items: center;
         }
         
         .hero-content {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 40px;
+            max-width: 100%;
+        }
+        
+        .hero-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        
+        .hust-logo {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
         }
         
         .card {
@@ -181,8 +186,8 @@
         /* 响应式优化 */
         @media (max-width: 768px) {
             .hero-section {
-                padding: 60px 0;
-                min-height: 400px;
+                padding: 40px 0;
+                min-height: auto;
             }
             
             .hero-section h1 {
@@ -191,20 +196,16 @@
             
             .hero-content {
                 padding: 20px;
+                text-align: center;
             }
-        }
-        
-        /* 校徽样式 */
-        .hust-badge {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            color: #333;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            
+            .hero-logo {
+                padding: 20px;
+            }
+            
+            .hust-logo {
+                max-width: 200px;
+            }
         }
     </style>
 </head>
@@ -240,17 +241,26 @@
         </div>
     </nav>
 
-    <!-- 英雄区域 -->
+    <!-- 修改后的英雄区域 - 左右布局 -->
     <section class="hero-section">
         <div class="container">
-            <div class="hero-content">
-                <h1 class="display-4 fw-bold mb-4">掌控你的学习进度</h1>
-                <p class="lead mb-4">可视化学习轨迹，记录成长点滴，让每一次进步都有迹可循</p>
-                <a href="web/tasks.html" class="btn btn-primary btn-lg">开始记录</a>
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-logo">
+                        <img src="hust_logo.png" alt="华中科技大学校徽" class="hust-logo">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold mb-4">掌控你的学习进度</h1>
+                        <p class="lead mb-4">可视化学习轨迹，记录成长点滴，让每一次进步都有迹可循</p>
+                        <a href="web/tasks.html" class="btn btn-primary btn-lg">开始记录</a>
+                        <div class="mt-4">
+                            <h5 class="text-muted">华中科技大学</h5>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="hust-badge">
-            华中科技大学
         </div>
     </section>
 
@@ -453,7 +463,7 @@
                             <div class="card-body">
                                 <div class="reflection-card p-3 mb-3">
                                     <h6>生活的最大天敌就是不自觉的陷入虚假的表演</h6>
-                                    <p class="mb-1">我们需要对具有表演性的积极状态保持高度的警惕。与其追求被人仰望的的、抽象的伟大，不如平和地专注当下的行动</p>
+                                    <p class="mb-1">我们需要对具有表演性的积极状态保持高度的警惕。与其追求被人仰望的的抽象伟大，不如平和地专注当下的行动</p>
                                     <small class="text-muted">2025-11-23</small>
                                 </div>
                                 <div class="reflection-card p-3">
